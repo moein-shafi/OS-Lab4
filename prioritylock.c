@@ -139,3 +139,18 @@ is_in_queue(struct prioritylock *lk, int pid)
 
   return FALSE;
 }
+
+void 
+show_acquiring_info(struct prioritylock *lk)
+{
+  cprintf("Priority of Process in Critical Section: %d\n", lk->pid);
+  cprintf("Processes in Queue:\n");
+
+  for (int i = ZERO; i < QUEUE_SIZE; ++i)
+  {
+    if (lk->queue[i] == ZERO)
+      break;
+    else
+      cprintf("%d. %d\n", i+ONE, lk->queue[i]);
+  }
+}
