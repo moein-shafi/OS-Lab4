@@ -37,5 +37,6 @@ void enqueue(struct prioritylock *lk, int pid);
 void insert(struct prioritylock *lk, int pid, int index);
 boolean queue_is_empty(struct prioritylock *lk);
 boolean is_in_queue(struct prioritylock *lk, int pid);
+void show_acquiring_info(struct prioritylock *lk);
 
 #endif
