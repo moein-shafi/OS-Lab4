@@ -21,6 +21,7 @@ int main(int argc, char const *argv[])
 		if (pid > 0)
 		{
 			pid = fork();
+            break;
 		}
 	}
 
@@ -46,5 +47,4 @@ int main(int argc, char const *argv[])
 	}
 
 	exit();
-	return 0;
 }
