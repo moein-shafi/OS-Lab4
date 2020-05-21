@@ -6,6 +6,7 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
+#include "prioritylock.h"
 
 int
 sys_fork(void)
@@ -88,4 +89,26 @@ sys_uptime(void)
   xticks = ticks;
   release(&tickslock);
   return xticks;
+}
+
+int
+sys_initpriority(void)
+{
+  char *name = "test";
+  init_prioritylock(&prioritylock, name);
+
+  return 0;
+}
+
+int
+sys_testpriority(void)
+{
+  acquire_priority(&prioritylock);
+  int z = 1;
+  for(int j = 0; j < 20000000; j+=1)
+    z += (j + 1);
+  cprintf ("");  
+  show_acquiring_info(&prioritylock);
+  release_priority(&prioritylock);
+  return 0;
 }
