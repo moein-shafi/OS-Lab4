@@ -105,10 +105,12 @@ sys_testpriority(void)
 {
   acquire_priority(&prioritylock);
   int z = 1;
-  for(int j = 0; j < 20000000; j+=1)
+  for(int j = 0; j < 20000; j+=1){
     z += (j + 1);
-  cprintf ("");  
+    cprintf ("");  
+  }
   show_acquiring_info(&prioritylock);
   release_priority(&prioritylock);
+
   return 0;
 }
