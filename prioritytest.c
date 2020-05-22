@@ -16,7 +16,6 @@ int main(int argc, char const *argv[])
 		if (pid > 0)
 		{
 			pid = fork();
-            break;
 		}
 	}
 
@@ -32,7 +31,7 @@ int main(int argc, char const *argv[])
 	{
 		for (i = 0; i < NUMBER_OF_PROCESSES; i++)
 			wait();
-		printf(1, "Scheduling test is finished!\n");
+		printf(1, "Priority lock test is finished!\n");
 	}
 
 	exit();
