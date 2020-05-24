@@ -28,6 +28,7 @@ int sleep(int);
 int uptime(void);
 int initpriority(void);
 int testpriority(void);
+int getsyscallnum(void);
 
 
 // ulib.c
