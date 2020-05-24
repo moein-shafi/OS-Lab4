@@ -5,12 +5,12 @@
 void
 init_prioritylock(struct prioritylock *lk, char *name)
 {
-  initlock(&lk->lk, "priority lock");
+  initlock(&lk->lk, NAME);
   lk->name = name;
   lk->locked = FALSE;
   lk->pid = ZERO;
 
-  for (int i = ZERO; i < QUEUE_SIZE; ++i)
+  for (int i = ZERO; i < NPROC; ++i)
   {
     lk->queue[i] = ZERO;
   }
@@ -45,11 +45,13 @@ release_priority(struct prioritylock *lk)
 {
   acquire(&lk->lk);
 
-  if (queue_is_empty(lk)) {
+  if (queue_is_empty(lk)) 
+  {
     lk->locked = FALSE;
     lk->pid = ZERO;
   }
-  else {
+  else 
+  {
     lk->locked = TRUE;
     lk->pid = dequeue(lk);
   }
@@ -63,7 +65,7 @@ dequeue(struct prioritylock *lk)
 {
   int target = lk->queue[ZERO];
 
-  for (int i = ZERO; i < QUEUE_SIZE-ONE; ++i)
+  for (int i = ZERO; i < NPROC-ONE; ++i)
   {
     if (lk->queue[i] == ZERO)
       break;
@@ -82,9 +84,10 @@ enqueue(struct prioritylock *lk, int pid)
     return;
   }
   int index = ZERO;
-  for (int i = ZERO; i < QUEUE_SIZE; ++i)
+  for (int i = ZERO; i < NPROC; ++i)
   {
-    if (lk->queue[i] > pid) {
+    if (lk->queue[i] > pid) 
+    {
       continue;
     }
 
@@ -98,7 +101,7 @@ enqueue(struct prioritylock *lk, int pid)
 void 
 insert(struct prioritylock *lk, int pid, int index)
 {
-  for (int i = QUEUE_SIZE-1; i >= index+ONE; --i)
+  for (int i = NPROC-ONE; i >= index+ONE; --i)
   {
     lk->queue[i] = lk->queue[i-ONE];
   }
@@ -117,7 +120,7 @@ queue_is_empty(struct prioritylock *lk)
 boolean 
 is_in_queue(struct prioritylock *lk, int pid)
 {
-  for (int i = ZERO; i < QUEUE_SIZE; ++i)
+  for (int i = ZERO; i < NPROC; ++i)
   {
     if (pid == lk->queue[i])
       return TRUE;
@@ -132,7 +135,7 @@ show_acquiring_info(struct prioritylock *lk)
   cprintf("Priority of Process in Critical Section: %d\n", lk->pid);
   cprintf("Processes in Queue:\n");
 
-  for (int i = ZERO; i < QUEUE_SIZE; ++i)
+  for (int i = ZERO; i < NPROC; ++i)
   {
     if (lk->queue[i] == ZERO)
       break;
