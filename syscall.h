@@ -25,5 +25,6 @@
 #define SYS_close  			21
 #define SYS_initpriority 	22
 #define SYS_testpriority 	23
+#define SYS_getsyscallnum 	24
 
 #endif
