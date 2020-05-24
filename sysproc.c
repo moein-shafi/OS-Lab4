@@ -114,3 +114,9 @@ sys_testpriority(void)
 
   return 0;
 }
+
+int
+sys_getsyscallnum(void)
+{
+  return 0;//TODO Add Implementation
+}
