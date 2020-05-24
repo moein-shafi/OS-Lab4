@@ -15,14 +15,14 @@
 #define ZERO 0 
 #define TRUE 1
 #define FALSE 0
-#define QUEUE_SIZE 10 
+#define NAME "priority lock"
 
 typedef int boolean;
 
 struct prioritylock {
   uint locked;       // Is the lock held?
   struct spinlock lk; // spinlock protecting this priority lock
-  int queue[QUEUE_SIZE];
+  int queue[NPROC];
   
   // For debugging:
   char *name;        // Name of lock.
