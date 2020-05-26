@@ -118,5 +118,10 @@ sys_testpriority(void)
 int
 sys_getsyscallnum(void)
 {
-  return 0;//TODO Add Implementation
+  //return syscallcounter;
+  pushcli();
+  int count = mycpu()->cpusyscallcount;
+  popcli();
+
+  return count;
 }
