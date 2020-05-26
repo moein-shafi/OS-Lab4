@@ -140,6 +140,16 @@ syscall(void)
   int num;
   struct proc *curproc = myproc();
 
+  pushcli();
+  syscallcounter++;
+  __sync_synchronize();
+  popcli();
+
+  pushcli();
+  mycpu()->cpusyscallcount++;
+  __sync_synchronize();
+  popcli();
+
   num = curproc->tf->eax;
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
     curproc->tf->eax = syscalls[num]();
