@@ -3,8 +3,8 @@
 #include "fcntl.h"
 
 #define NUMBER_OF_PROCESSES 10
+#define MESSAGE_LENGTH 20
 #define NAME_LENGTH 4
-#define COUNT_LENGTH 6
 #define ONE 1
 
 void reverse(char* str, int len) 
@@ -62,10 +62,9 @@ int main(int argc, char const *argv[])
 	else if (pid == 0)
 	{
 		char filename[NAME_LENGTH];
-		char count[COUNT_LENGTH];
+		char message[MESSAGE_LENGTH] = "Per-cpu tests";
 
 		integer_to_string(getpid(), filename, 0);
-		integer_to_string(getsyscallnum(), count, 0);
 
 		int fd = open(filename, O_CREATE | O_RDWR);
 
@@ -75,7 +74,7 @@ int main(int argc, char const *argv[])
         	exit();
     	}
 
-		if(write(fd, count, sizeof(count)) != sizeof(count))
+		if(write(fd, message, sizeof(message)) != sizeof(message))
 		{
         	printf(1, "write to file failed!\n");
         	exit();
@@ -86,6 +85,9 @@ int main(int argc, char const *argv[])
 	{
 		for (i = 0; i < NUMBER_OF_PROCESSES; i++)
 			wait();
+
+		getsyscallnum();
+
 		printf(1, "Per-cpu test is finished!\n");
 	}
 	
