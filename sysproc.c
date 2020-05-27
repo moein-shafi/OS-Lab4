@@ -118,10 +118,21 @@ sys_testpriority(void)
 int
 sys_getsyscallnum(void)
 {
-  //return syscallcounter;
-  pushcli();
-  int count = mycpu()->cpusyscallcount;
-  popcli();
+  int total = 0;
+  int count = 0;
+  cprintf("Shared system call counter value: %d\n", syscallcounter);
 
-  return count;
+  for (int i = 0; i < NCPU; ++i)
+  {
+    pushcli();
+    count = cpus[i].cpusyscallcount;
+    popcli();
+
+    total += count;
+    cprintf("CPU %d system call counter value: %d\n", i, count);
+  }
+
+  cprintf("Sum of Per-cpu system call counters value: %d\n", total);
+
+  return 0;
 }
