@@ -106,6 +106,7 @@ extern int sys_uptime(void);
 extern int sys_initpriority(void);
 extern int sys_testpriority(void);
 extern int sys_getsyscallnum(void);
+extern int sys_resetsyscallnum(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]            sys_fork,
@@ -132,7 +133,26 @@ static int (*syscalls[])(void) = {
 [SYS_initpriority]    sys_initpriority,
 [SYS_testpriority]    sys_testpriority,
 [SYS_getsyscallnum]   sys_getsyscallnum,
+[SYS_resetsyscallnum] sys_resetsyscallnum,
 };
+
+void 
+update_shared_syscallcounter(void)
+{
+  pushcli();
+  syscallcounter++;
+  __sync_synchronize();
+  popcli();
+}
+
+void 
+update_per_cpu_syscallcounter(void)
+{
+  pushcli();
+  mycpu()->syscallcounter++;
+  __sync_synchronize();
+  popcli();
+}
 
 void
 syscall(void)
@@ -140,15 +160,8 @@ syscall(void)
   int num;
   struct proc *curproc = myproc();
 
-  pushcli();
-  syscallcounter++;
-  __sync_synchronize();
-  popcli();
-
-  pushcli();
-  mycpu()->cpusyscallcount++;
-  __sync_synchronize();
-  popcli();
+  update_shared_syscallcounter();
+  update_per_cpu_syscallcounter();
 
   num = curproc->tf->eax;
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
