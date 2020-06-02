@@ -115,6 +115,25 @@ sys_testpriority(void)
   return 0;
 }
 
+int 
+sys_resetsyscallnum(void)
+{
+  for (int i = 0; i < NCPU; ++i)
+  {
+    pushcli();
+    cpus[i].syscallcounter = 0;
+    __sync_synchronize();
+    popcli();
+  }
+
+  pushcli();
+  syscallcounter = 0;
+  __sync_synchronize();
+  popcli();
+
+  return 0;
+}
+
 int
 sys_getsyscallnum(void)
 {
@@ -125,7 +144,7 @@ sys_getsyscallnum(void)
   for (int i = 0; i < NCPU; ++i)
   {
     pushcli();
-    count = cpus[i].cpusyscallcount;
+    count = cpus[i].syscallcounter;
     popcli();
 
     total += count;
